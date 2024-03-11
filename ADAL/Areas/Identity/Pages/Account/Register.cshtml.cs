@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography.Pkcs;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -123,6 +124,9 @@ namespace ADAL.Areas.Identity.Pages.Account
             [ValidateNever]
             
             public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            public ClientModel clientModel { get; set; }
+            public ContectInfoModel contectInfoModel { get; set; }
         }
 
 
@@ -151,10 +155,19 @@ namespace ADAL.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
+                var newUser = new ApplicationUser();
+                newUser.Email = Input.Email;
+                newUser.FirstName = Input.FirstName;
+                newUser.LastName = Input.LastName;
+                newUser.UserName = user.UserName;
+                newUser.NormalizedUserName = user.NormalizedUserName;
+                newUser.NormalizedEmail = user.NormalizedEmail;
+                newUser.EmailConfirmed = user.EmailConfirmed;
+                newUser.PasswordHash = user.PasswordHash;
+                newUser.SecurityStamp = user.SecurityStamp;
+                newUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await _userManager.CreateAsync(newUser, Input.Password);
 
                 if (result.Succeeded)
                 {

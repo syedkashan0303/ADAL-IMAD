@@ -26,5 +26,13 @@ namespace ADAL.Models
         [EmailAddress]
         [GmailEmail(ErrorMessage = "Email must be a Gmail address.")]
         public string Email { get; set; }
+        public string UserId { get; set; }
+        public string CNIC { get; set; }
+        public int LawyerType { get; set; }
+        public int ContectInfoId { get; set; }
+        public bool Active { get; set; }
+        public bool IsAnonymous { get; set; }
+        public DateTime CreatedOnUTC { get; set; }
+        public DateTime UpdatedOnUTC { get; set; }
     }
 }
